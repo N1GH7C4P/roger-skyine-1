@@ -67,7 +67,18 @@ fail2ban config stuff here
 Tested fail2ban with slowloris
 slowloris 10.13.199.214
 monitoring the log file shows thefailed DOS -attempts. 
-(sudo tail -f /var/log/fail2ban.log)
+sudo tail -f /var/log/fail2ban.log
+
+# Unbanning myself
+
+I got myself banned by trying to SSH the root.
+ssh root@10.13.199.214
+
+So I had to go and manually unban myself. 
+
+Bans are listed in file:
+/etc/fail2ban/jail.local
+Clearing the file will end all current bans without affecting the filters.
 
 # Portsentry
 
@@ -83,14 +94,23 @@ portsentry config stuff here
 
 Installed mailutils and postfix
 
+Delivering mail to the root has been made impossible by design on any Debian version.
 ```
 4.3. No deliveries to root!
 No Exim 4 version released with any Debian OS can run deliveries as root. If you don't redirect mail for root via /etc/aliases to a nonprivileged account, the mail will be delivered to /var/mail/mail with permissions 0600 and owner mail:mail.
 This redirection is done by the mail4root router which is last in the list and will thus catch mail for root that has not been taken care of earlier.
-https://www.linuxquestions.org/questions/debian-26/root-not-getting-mail-4175423619/
 ```
+https://www.linuxquestions.org/questions/debian-26/root-not-getting-mail-4175423619/
 
-Mails sent to root are redirected to sudo user kpolojar.
+This has been done because receiving mail as root is security vulnerability and bad practise.
+
+https://www.howtogeek.com/124950/htg-explains-why-you-shouldnt-log-into-your-linux-system-as-root/
+
+This is why we have the less privileged sudo account for system administrator in the first place.
+
+The subject mandates that mail is sent to root, But there is no mention of receiving or reading said mail on that account.
+
+Thus mails are sent to root and then redirected to sudo user kpolojar.
 
 # Scripts
 
@@ -110,17 +130,20 @@ Update packages every sunday at 4 AM and at reboot.
 Monitor crontab and send mail in case of change at midnight
 0 0 * * *  sudo ~/home/kpolojar/cron_monitor.sh
 
+```
 #!/bin/bash
 DIFF=$(diff /etc/crontab.backup /etc/crontab)
 cat /etc/crontab > /etc/crontab.backup
 if [ "$DIFF" != "" ]; then
         echo "crontab changed, sending mail to root" | mail -s "crontab updated>
 fi
+```
+
+# Disabled nonmandatory services
 
 List enabled services
 systemctl list-unit-files --type service | grep enabled
 
-Disabled services:
 kpolojar@debian:~$ sudo systemctl disable console-setup.service
 Removed /etc/systemd/system/multi-user.target.wants/console-setup.service.
 kpolojar@debian:~$ sudo systemctl disable cryptdisks-early.service
@@ -133,3 +156,78 @@ kpolojar@debian:~$ sudo systemctl disable ifupdown-wait-online.service
 kpolojar@debian:~$ sudo systemctl disable keyboard-setup.service
 Removed /etc/systemd/system/sysinit.target.wants/keyboard-setup.service.
 kpolojar@debian:~$ sudo systemctl disable nftables.service
+
+# SSL
+
+https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-debian-9
+
+Creating certificate
+
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+
+Country Name (2 letter code) [AU]:FI
+State or Province Name (full name) [Some-State]:Uusimaa
+Locality Name (eg, city) []:Helsinki
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Hive
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:Kimmo Polojarvi
+Email Address []:kpolojar@debian.debbie
+
+sudo nano /etc/apache2/conf-available/ssl-params.conf
+
+```
+SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
+SSLProtocol All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+SSLHonorCipherOrder On
+# Disable preloading HSTS for now.  You can use the commented out header line that includes
+# the "preload" directive if you understand the implications.
+# Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+Header always set X-Frame-Options DENY
+Header always set X-Content-Type-Options nosniff
+# Requires Apache >= 2.4
+SSLCompression off
+SSLUseStapling on
+SSLStaplingCache "shmcb:logs/stapling-cache(150000)"
+# Requires Apache >= 2.4.11
+SSLSessionTickets Off
+```
+
+sudo nano /etc/apache2/sites-available/default-ssl.conf
+
+```
+<IfModule mod_ssl.c>
+        <VirtualHost _default_:443>
+                ServerAdmin kpolojar@debian.debbie
+                ServerName 10.13.199.214
+
+                DocumentRoot /var/www/html
+
+                ErrorLog ${APACHE_LOG_DIR}/error.log
+                CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+                SSLEngine on
+
+                SSLCertificateFile      /etc/ssl/certs/apache-selfsigned.crt
+                SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+      
+                <FilesMatch "\.(cgi|shtml|phtml|php)$">
+                                SSLOptions +StdEnvVars
+                </FilesMatch>
+                <Directory /usr/lib/cgi-bin>
+                                SSLOptions +StdEnvVars
+                </Directory>
+        </VirtualHost>
+</IfModule>
+```
+
+```
+sudo nano /etc/apache2/sites-available/000-default.conf
+
+<VirtualHost *:80>
+        . . .
+
+        Redirect permanent "/" "https://10.13.199.214/"
+
+        . . .
+</VirtualHost>
+```
