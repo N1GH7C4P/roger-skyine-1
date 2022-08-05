@@ -83,10 +83,12 @@ portsentry config stuff here
 
 Installed mailutils and postfix
 
+```
 4.3. No deliveries to root!
 No Exim 4 version released with any Debian OS can run deliveries as root. If you don't redirect mail for root via /etc/aliases to a nonprivileged account, the mail will be delivered to /var/mail/mail with permissions 0600 and owner mail:mail.
 This redirection is done by the mail4root router which is last in the list and will thus catch mail for root that has not been taken care of earlier.
 https://www.linuxquestions.org/questions/debian-26/root-not-getting-mail-4175423619/
+```
 
 Mails sent to root are redirected to sudo user kpolojar.
 
