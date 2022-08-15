@@ -230,10 +230,8 @@ sudo nano /etc/apache2/sites-available/default-ssl.conf
         </VirtualHost>
 </IfModule>
 ```
-
-```
 sudo nano /etc/apache2/sites-available/000-default.conf
-
+```
 <VirtualHost *:80>
         . . .
 
@@ -247,35 +245,13 @@ sudo nano /etc/apache2/sites-available/000-default.conf
 
 ## Git & GitHub access token 
 
-We need to setup GitHub access token to be able to fetch changes from my personal github repo.
-
 sudo apt-get install git
+
+We need to setup GitHub access token to be able to fetch changes from my personal github repo.
 
 Created GitHub access token
 https://www.edgoad.com/2021/02/using-personal-access-tokens-with-git-and-github.html
 
-## Go
+## Deployment GitHooks
 
-Install go.
-
-https://www.geeksforgeeks.org/how-to-install-go-on-debian-10/
-
-Adding go to the $PATH variable for sudo.
-https://stackoverflow.com/questions/71899341/go-command-not-found-error-when-using-sudo
-
-sudo has its own $PATH which is defined by the secure_path setting in your sudo config.
-
-```
-To fix it:
-
-Open your sudo config sudo visudo
-Locate the line staring with Defaults    secure_path =
-Add :/usr/local/go/bin to the end of the line
-After saving the config, you should be able to use go with sudo
-```
-
-## Gitomatic
-
-I installed gitomatic go -script that monitors changes on GitHub repo and fetches changes when nescessary.
-
-https://golangexample.com/a-tool-to-monitor-git-repositories-and-automatically-pull-push-changes-3/
+https://gist.github.com/noelboss/3fe13927025b89757f8fb12e9066f2fa
