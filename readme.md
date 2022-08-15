@@ -5,13 +5,13 @@ Installed Debian 11, disk size 8 GB and 4.2 GB home partition on VirtualBox VM.
 apt-get update
 apt-get upgrade
 
-# Adding non-root user
+## Adding non-root user
 
 adduser kpolojar
 apt-get install sudo
 usermod -aG sudo kpolojar
 
-# Network configuration
+## Network configuration
 
 Changed VM network setting NAT -> Bridged
 
@@ -27,7 +27,7 @@ iface enp0s3 inet static
 	netmask 255.255.255.252 (/30)
 	gateway 10.13.254.254
 
-# SSH connection
+## SSH connection
 
 /etc/ssh/sshd_config
 Changed the ssh default port to 5555
@@ -48,13 +48,15 @@ Changed settings back to refuse password connection
 comment out PasswordAuthentication
 uncommment PubkeyAuthentication
 
-# Firewall
+# Network Security
+
+## Firewall
 
 Installed ufw
 
 Added rules to allow tcp at ports 5555 and 80 for SSH and HTTP respectively, 443 for https (udp & tcp)
 
-# Fail2ban
+## Fail2ban
 
 Installed fail2ban
 
@@ -69,7 +71,7 @@ slowloris 10.13.199.214
 monitoring the log file shows thefailed DOS -attempts. 
 sudo tail -f /var/log/fail2ban.log
 
-# Unbanning myself
+### Unbanning myself
 
 I got myself banned by trying to SSH the root.
 ssh root@10.13.199.214
@@ -80,7 +82,7 @@ Bans are listed in file:
 /etc/fail2ban/jail.local
 Clearing the file will end all current bans without affecting the filters.
 
-# Portsentry
+## Portsentry
 
 Installed portsentry
 
@@ -90,7 +92,9 @@ portsentry config stuff here
 
 <-------->
 
-# Mail
+# Monitoring & Updates
+
+## Mail
 
 Installed mailutils and postfix
 
@@ -108,7 +112,7 @@ https://www.howtogeek.com/124950/htg-explains-why-you-shouldnt-log-into-your-lin
 
 This is why we have the less privileged sudo account for system administrator in the first place. The subject mandates that mail is sent to root, But there is no mention of receiving or reading said mail on that account. Thus mails are sent to root and then redirected to sudo user kpolojar.
 
-# Scripts
+## Scripts
 
 created script update.sh
 Updates & upgrades all packages.
@@ -141,11 +145,15 @@ if [ "$DIFF" != "" ]; then
 fi
 ```
 
-# Disabled nonmandatory services
+# Resource Efficiency
+
+
+## Disabled nonmandatory services
 
 List enabled services
 systemctl list-unit-files --type service | grep enabled
 
+```
 kpolojar@debian:~$ sudo systemctl disable console-setup.service
 Removed /etc/systemd/system/multi-user.target.wants/console-setup.service.
 kpolojar@debian:~$ sudo systemctl disable cryptdisks-early.service
@@ -158,6 +166,7 @@ kpolojar@debian:~$ sudo systemctl disable ifupdown-wait-online.service
 kpolojar@debian:~$ sudo systemctl disable keyboard-setup.service
 Removed /etc/systemd/system/sysinit.target.wants/keyboard-setup.service.
 kpolojar@debian:~$ sudo systemctl disable nftables.service
+```
 
 # SSL
 
@@ -234,9 +243,9 @@ sudo nano /etc/apache2/sites-available/000-default.conf
 </VirtualHost>
 ```
 
-## DEPLOYMENT AUTOMATION
+# DEPLOYMENT AUTOMATION
 
-# Git & GitHub access token 
+## Git & GitHub access token 
 
 We need to setup GitHub access token to be able to fetch changes from my personal github repo.
 
@@ -245,7 +254,7 @@ sudo apt-get install git
 Created GitHub access token
 https://www.edgoad.com/2021/02/using-personal-access-tokens-with-git-and-github.html
 
-# Go
+## Go
 
 Install go.
 
@@ -264,6 +273,8 @@ Locate the line staring with Defaults    secure_path =
 Add :/usr/local/go/bin to the end of the line
 After saving the config, you should be able to use go with sudo
 ```
+
+## Gitomatic
 
 I installed gitomatic go -script that monitors changes on GitHub repo and fetches changes when nescessary.
 
