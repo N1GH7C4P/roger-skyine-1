@@ -94,7 +94,7 @@ portsentry config stuff here
 
 Installed mailutils and postfix
 
-Delivering mail to the root has been made impossible by design on any Debian version.
+Delivering mail to the root has been disabled on any Debian distribution.
 ```
 4.3. No deliveries to root!
 No Exim 4 version released with any Debian OS can run deliveries as root. If you don't redirect mail for root via /etc/aliases to a nonprivileged account, the mail will be delivered to /var/mail/mail with permissions 0600 and owner mail:mail.
@@ -106,16 +106,18 @@ This has been done because receiving mail as root is security vulnerability and 
 
 https://www.howtogeek.com/124950/htg-explains-why-you-shouldnt-log-into-your-linux-system-as-root/
 
-This is why we have the less privileged sudo account for system administrator in the first place.
-
-The subject mandates that mail is sent to root, But there is no mention of receiving or reading said mail on that account.
-
-Thus mails are sent to root and then redirected to sudo user kpolojar.
+This is why we have the less privileged sudo account for system administrator in the first place. The subject mandates that mail is sent to root, But there is no mention of receiving or reading said mail on that account. Thus mails are sent to root and then redirected to sudo user kpolojar.
 
 # Scripts
 
 created script update.sh
 Updates & upgrades all packages.
+
+```
+!/bin/bash
+sudo apt-get update -y >> /var/log/update_script.log
+sudo apt-get upgrade -y >> /var/log/update_script.log
+```
 
 created /etc/crontab.backup and gave it chmod 755
 created script cron_monitor.sh
@@ -135,7 +137,7 @@ Monitor crontab and send mail in case of change at midnight
 DIFF=$(diff /etc/crontab.backup /etc/crontab)
 cat /etc/crontab > /etc/crontab.backup
 if [ "$DIFF" != "" ]; then
-        echo "crontab changed, sending mail to root" | mail -s "crontab updated>
+        echo "crontab changed, sending mail to root" | mail -s "crontab updated" root
 fi
 ```
 
@@ -231,3 +233,38 @@ sudo nano /etc/apache2/sites-available/000-default.conf
         . . .
 </VirtualHost>
 ```
+
+## DEPLOYMENT AUTOMATION
+
+# Git & GitHub access token 
+
+We need to setup GitHub access token to be able to fetch changes from my personal github repo.
+
+sudo apt-get install git
+
+Created GitHub access token
+https://www.edgoad.com/2021/02/using-personal-access-tokens-with-git-and-github.html
+
+# Go
+
+Install go.
+
+https://www.geeksforgeeks.org/how-to-install-go-on-debian-10/
+
+Adding go to the $PATH variable for sudo.
+https://stackoverflow.com/questions/71899341/go-command-not-found-error-when-using-sudo
+
+sudo has its own $PATH which is defined by the secure_path setting in your sudo config.
+
+```
+To fix it:
+
+Open your sudo config sudo visudo
+Locate the line staring with Defaults    secure_path =
+Add :/usr/local/go/bin to the end of the line
+After saving the config, you should be able to use go with sudo
+```
+
+I installed gitomatic go -script that monitors changes on GitHub repo and fetches changes when nescessary.
+
+https://golangexample.com/a-tool-to-monitor-git-repositories-and-automatically-pull-push-changes-3/
