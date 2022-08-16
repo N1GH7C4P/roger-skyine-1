@@ -269,14 +269,12 @@ https://serverfault.com/questions/856194/securely-add-a-host-e-g-github-to-the-s
 
 ## Deployment GitHooks
 
-```
 How it works
 You are developing in a working-copy on your local machine, lets say on the master branch. Most of the time, people would push code to a remote server like github.com or gitlab.com and pull or export it to a production server. Or you use a service like deepl.io to act upon a Web-Hook that's triggered that service.
 
 But here, we add a "bare" git repository that we create on the production server and pusblish our branch (f.e. master) directly to that server. This repository acts upon the push event using a 'git-hook' to move the files into a deployment directory on your server. No need for a midle man.
 
 This creates a scenario where there is no middle man, high security with encrypted communication (using ssh keys, only authorized people get access to the server) and high flexibility tue to the use of .sh scripts for the deployment.
-```
 
 https://gist.github.com/noelboss/3fe13927025b89757f8fb12e9066f2fa
 
