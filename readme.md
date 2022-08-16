@@ -1,5 +1,9 @@
 # roger-skyline-1
 
+## How to properly drink shots
+
+Roger-skyline-1 let you install a Virtual Machine, discover the basics about system and network administration as well as a lots of services used on a server machine.
+
 - [Installation](#installation)
   * [Adding non-root user](#adding-non-root-user)
   * [Network configuration](#network-configuration)
