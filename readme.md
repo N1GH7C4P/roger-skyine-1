@@ -1,3 +1,5 @@
+# roger-skyine-1
+
 - [Installation](#installation)
   * [Adding non-root user](#adding-non-root-user)
   * [Network configuration](#network-configuration)
@@ -18,9 +20,6 @@
   * [SSH agent forwarding](#ssh-agent-forwarding)
   * [Deployment with GitHooks](#deployment-with-githooks)
     + [How it works](#how-it-works)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 
 # Installation
 
@@ -82,23 +81,81 @@ Added rules to allow tcp at ports 5555 and 80 for SSH and HTTP respectively, 443
 
 ## Fail2ban
 
-Installed fail2ban
+https://www.garron.me/en/go2linux/fail2ban-protect-web-server-http-dos-attack.html
 
-<-------->
+https://www.xmodulo.com/configure-fail2ban-apache-http-server.html
 
-fail2ban config stuff here
 
-<-------->
+Edit your /etc/fail2ban/jail.conf file and add this section:
+
+```
+[http-get-dos]
+enabled = true
+port = http,https
+filter = http-get-dos
+logpath = /var/log/varnish/access.log
+maxretry = 300
+findtime = 300
+#ban for 5 minutes
+bantime = 600
+action = iptables[name=HTTP, port=http, protocol=tcp]
+
+# detect password authentication failures
+[apache]
+enabled  = true
+port     = http,https
+filter   = apache-auth
+logpath  = /var/log/apache*/*error.log
+maxretry = 6
+
+# detect potential search for exploits and php vulnerabilities
+[apache-noscript]
+enabled  = true
+port     = http,https
+filter   = apache-noscript
+logpath  = /var/log/apache*/*error.log
+maxretry = 6
+
+# detect Apache overflow attempts
+[apache-overflows]
+enabled  = true
+port     = http,https
+filter   = apache-overflows
+logpath  = /var/log/apache*/*error.log
+maxretry = 2
+
+# detect failures to find a home directory on a server
+[apache-nohome]
+enabled  = true
+port     = http,https
+filter   = apache-nohome
+logpath  = /var/log/apache*/*error.log
+maxretry = 2
+```
+
+Now we need to create the filter, to do that, create the file /etc/fail2ban/filter.d/http-get-dos.conf and copy the text below in it:
+
+```
+[Definition]
+
+failregex = ^<HOST> -.*"(GET|POST|PUT|DELETE).*
+ignoreregex =
+```
+
+## Testing network security
+
+### slowloris
 
 Tested fail2ban with slowloris
 slowloris 10.13.199.214
 monitoring the log file shows thefailed DOS -attempts. 
 sudo tail -f /var/log/fail2ban.log
 
-### Unbanning myself
+### Trying to SSH directly to root (forbidden)
 
-I got myself banned by trying to SSH the root.
 ssh root@10.13.199.214
+
+### Unbanning myself
 
 So I had to go and manually unban myself. 
 
@@ -108,13 +165,9 @@ Clearing the file will end all current bans without affecting the filters.
 
 ## Portsentry
 
-Installed portsentry
+https://en-wiki.ikoula.com/en/To_protect_against_the_scan_of_ports_with_portsentry
 
-<-------->
-
-portsentry config stuff here
-
-<-------->
+Pretty much just followed the tutorial here ...
 
 # Monitoring & Updates
 
@@ -174,7 +227,12 @@ fi
 ## Disabled nonmandatory services
 
 List enabled services
-systemctl list-unit-files --type service | grep enabled
+
+```
+systemctl list-unit-files --state=enabled
+```
+
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/Screen Shot 2022-08-16 at 7.03.28 PM?raw=true)
 
 ```
 kpolojar@debian:~$ sudo systemctl disable console-setup.service
@@ -189,6 +247,11 @@ kpolojar@debian:~$ sudo systemctl disable ifupdown-wait-online.service
 kpolojar@debian:~$ sudo systemctl disable keyboard-setup.service
 Removed /etc/systemd/system/sysinit.target.wants/keyboard-setup.service.
 kpolojar@debian:~$ sudo systemctl disable nftables.service
+kpolojar@debian:~$ sudo systemctl disable apt-daily-upgrade.timer
+Removed /etc/systemd/system/timers.target.wants/apt-daily-upgrade.timer.
+kpolojar@debian:~$ sudo systemctl disable apt-daily.timer
+Removed /etc/systemd/system/timers.target.wants/apt-daily.timer.
+kpolojar@debian:~$
 ```
 
 # SSL
@@ -291,6 +354,18 @@ Otherwise the VM doesn't have permission to fetch from GitHub.
 Then add GitHub to your known hossts file.
 https://serverfault.com/questions/856194/securely-add-a-host-e-g-github-to-the-ssh-known-hosts-file
 
+ssh-keyscan -t rsa github.com 
+
+```
+# github.com:22 SSH-2.0-babeld-f3847d63
+2048 SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8 github.com (RSA)
+```
+
+Append here:
+```
+~/.ssh/known_hosts
+```
+
 ## Deployment with GitHooks
 
 ### How it works
@@ -301,6 +376,8 @@ But here, we add a "bare" git repository that we create on the production server
 This creates a scenario where there is no middle man, high security with encrypted communication (using ssh keys, only authorized people get access to the server) and high flexibility tue to the use of .sh scripts for the deployment.
 
 https://gist.github.com/noelboss/3fe13927025b89757f8fb12e9066f2fa
+
+Follow the tutorial.
 
 https://towardsdatascience.com/how-to-create-a-git-hook-to-push-to-your-server-and-github-repo-fe51f59122dd
 
