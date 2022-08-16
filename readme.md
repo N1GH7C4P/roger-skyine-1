@@ -147,7 +147,6 @@ fi
 
 # Resource Efficiency
 
-
 ## Disabled nonmandatory services
 
 List enabled services
@@ -252,6 +251,42 @@ We need to setup GitHub access token to be able to fetch changes from my persona
 Created GitHub access token
 https://www.edgoad.com/2021/02/using-personal-access-tokens-with-git-and-github.html
 
+To cache your GitHub credentials for HTTPS access follow this tutorial.
+
+https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git
+
+## SSH agent forwarding
+
+This is needed to use GitHub commands through SSH -connection without providing credentials each time.
+
+https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding
+
+Make sure that you have the same SSH keys on your VM and local machine.
+Otherwise the VM doesn't have permission to fetch from GitHub.
+
+Then add GitHub to your known hossts file.
+https://serverfault.com/questions/856194/securely-add-a-host-e-g-github-to-the-ssh-known-hosts-file
+
 ## Deployment GitHooks
 
+```
+How it works
+You are developing in a working-copy on your local machine, lets say on the master branch. Most of the time, people would push code to a remote server like github.com or gitlab.com and pull or export it to a production server. Or you use a service like deepl.io to act upon a Web-Hook that's triggered that service.
+
+But here, we add a "bare" git repository that we create on the production server and pusblish our branch (f.e. master) directly to that server. This repository acts upon the push event using a 'git-hook' to move the files into a deployment directory on your server. No need for a midle man.
+
+This creates a scenario where there is no middle man, high security with encrypted communication (using ssh keys, only authorized people get access to the server) and high flexibility tue to the use of .sh scripts for the deployment.
+```
+
 https://gist.github.com/noelboss/3fe13927025b89757f8fb12e9066f2fa
+
+https://towardsdatascience.com/how-to-create-a-git-hook-to-push-to-your-server-and-github-repo-fe51f59122dd
+
+If you get permission problems do this.
+https://stackoverflow.com/questions/14127255/remove-git-index-lock-permission-denied
+
+Now when you do
+```
+git push server master
+```
+the changes are pushed straight to the VM server.
