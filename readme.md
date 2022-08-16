@@ -232,7 +232,7 @@ List enabled services
 systemctl list-unit-files --state=enabled
 ```
 
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/Screen Shot 2022-08-16 at 7.03.28 PM?raw=true)
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/master/image.png?raw=true)
 
 ```
 kpolojar@debian:~$ sudo systemctl disable console-setup.service
