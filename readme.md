@@ -232,8 +232,6 @@ List enabled services
 systemctl list-unit-files --state=enabled
 ```
 
-![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/master/image.png?raw=true)
-
 ```
 kpolojar@debian:~$ sudo systemctl disable console-setup.service
 Removed /etc/systemd/system/multi-user.target.wants/console-setup.service.
@@ -253,6 +251,16 @@ kpolojar@debian:~$ sudo systemctl disable apt-daily.timer
 Removed /etc/systemd/system/timers.target.wants/apt-daily.timer.
 kpolojar@debian:~$
 ```
+
+Disable unnescessary services
+
+```
+sudo systemctl disable apt-daily.timer
+```
+
+This is what we are left with.
+
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/master/image.png?raw=true)
 
 # SSL
 
@@ -327,6 +335,8 @@ sudo nano /etc/apache2/sites-available/000-default.conf
 </VirtualHost>
 ```
 
+Navigating to 10.13.199.214 with browser warns about unknown certificate and opens up the apache greeting site.
+
 # DEPLOYMENT AUTOMATION
 
 ## Git & GitHub access token 
@@ -389,3 +399,8 @@ Now when you do
 git push server master
 ```
 the changes are pushed straight to the VM server.
+
+# Checksum
+
+shasum ~/goinfre/debbie.vdi
+e3d63b5b2b17357568e9b2f15c7f70803caf9aad  /Users/kpolojar/goinfre/debbie.vdi
