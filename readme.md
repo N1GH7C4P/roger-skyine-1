@@ -1,4 +1,4 @@
-# roger-skyine-1
+# roger-skyline-1
 
 - [Installation](#installation)
   * [Adding non-root user](#adding-non-root-user)
@@ -21,7 +21,7 @@
   * [Deployment with GitHooks](#deployment-with-githooks)
     + [How it works](#how-it-works)
 
-# Installation
+# INSTALLATION
 
 Installed Debian 11, disk size 8 GB and 4.2 GB home partition on VirtualBox VM.
 
@@ -71,7 +71,7 @@ Changed settings back to refuse password connection
 comment out PasswordAuthentication
 uncommment PubkeyAuthentication
 
-# Network Security
+# NETWORK SECURITY
 
 ## Firewall
 
@@ -169,7 +169,7 @@ https://en-wiki.ikoula.com/en/To_protect_against_the_scan_of_ports_with_portsent
 
 Pretty much just followed the tutorial here ...
 
-# Monitoring & Updates
+# MONITORING & UPDATES
 
 ## Mail
 
@@ -222,7 +222,7 @@ if [ "$DIFF" != "" ]; then
 fi
 ```
 
-# Resource Efficiency
+# RESOURCE EFFICIENCY
 
 ## Disabled nonmandatory services
 
@@ -400,7 +400,7 @@ git push server master
 ```
 the changes are pushed straight to the VM server.
 
-# Checksum
+# CHECKSUM
 
 shasum ~/goinfre/debbie.vdi
 e3d63b5b2b17357568e9b2f15c7f70803caf9aad  /Users/kpolojar/goinfre/debbie.vdi
