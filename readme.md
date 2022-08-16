@@ -1,3 +1,27 @@
+- [Installation](#installation)
+  * [Adding non-root user](#adding-non-root-user)
+  * [Network configuration](#network-configuration)
+  * [SSH connection](#ssh-connection)
+- [Network Security](#network-security)
+  * [Firewall](#firewall)
+  * [Fail2ban](#fail2ban)
+    + [Unbanning myself](#unbanning-myself)
+  * [Portsentry](#portsentry)
+- [Monitoring & Updates](#monitoring---updates)
+  * [Mail](#mail)
+  * [Scripts](#scripts)
+- [Resource Efficiency](#resource-efficiency)
+  * [Disabled nonmandatory services](#disabled-nonmandatory-services)
+- [SSL](#ssl)
+- [DEPLOYMENT AUTOMATION](#deployment-automation)
+  * [Git & GitHub access token](#git---github-access-token)
+  * [SSH agent forwarding](#ssh-agent-forwarding)
+  * [Deployment with GitHooks](#deployment-with-githooks)
+    + [How it works](#how-it-works)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 # Installation
 
 Installed Debian 11, disk size 8 GB and 4.2 GB home partition on VirtualBox VM.
@@ -267,9 +291,9 @@ Otherwise the VM doesn't have permission to fetch from GitHub.
 Then add GitHub to your known hossts file.
 https://serverfault.com/questions/856194/securely-add-a-host-e-g-github-to-the-ssh-known-hosts-file
 
-## Deployment GitHooks
+## Deployment with GitHooks
 
-How it works
+### How it works
 You are developing in a working-copy on your local machine, lets say on the master branch. Most of the time, people would push code to a remote server like github.com or gitlab.com and pull or export it to a production server. Or you use a service like deepl.io to act upon a Web-Hook that's triggered that service.
 
 But here, we add a "bare" git repository that we create on the production server and pusblish our branch (f.e. master) directly to that server. This repository acts upon the push event using a 'git-hook' to move the files into a deployment directory on your server. No need for a midle man.
