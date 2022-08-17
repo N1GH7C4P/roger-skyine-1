@@ -1,8 +1,10 @@
 # roger-skyline-1
 
-## How to properly drink shots
+# INTRODUCTION
 
 Roger-skyline-1 let you install a Virtual Machine, discover the basics about system and network administration as well as a lots of services used on a server machine.
+
+# TABLE OF CONTENTS
 
 - [Installation](#installation)
   * [Adding non-root user](#adding-non-root-user)
@@ -191,7 +193,12 @@ This has been done because receiving mail as root is security vulnerability and 
 
 https://www.howtogeek.com/124950/htg-explains-why-you-shouldnt-log-into-your-linux-system-as-root/
 
-This is why we have the less privileged sudo account for system administrator in the first place. The subject mandates that mail is sent to root, But there is no mention of receiving or reading said mail on that account. Thus mails are sent to root and then redirected to sudo user kpolojar.
+This is why we have the less privileged sudo account for system administrator in the first place. Thus mails are sent to root and then redirected to sudo user kpolojar. To be able to read the mail on the root account I replaced the /var/mail/root with a soft link to kpolojar mail box. This is done purely to comply with the subject and I wouldn't recommend it as a solution otherwise. I'm not sure if tis breaks some hidden functionality that relies on the /var/mail/root -file. As an additional headache, all mail directed to account kpolojar also becomes available to root.
+```
+sudo rm /var/mail/root
+sudo ln -s /var/mail/kpolojar /var/mail/root
+```
+https://serverfault.com/questions/890429/debian-exim4-eading-local-mail-with-the-mail-command-as-root
 
 ## Scripts
 
