@@ -287,7 +287,7 @@ sudo chmod 755 /etc/crontab.backup
 
 Created a  script that compares /etc/crontab and /etc/crontab.backup, if there is diff, creates new backup and send mail to root (see [Mail](#mail)).
 ```
-sudo nano script cron_monitor.sh
+sudo nano scripts/cron_monitor.sh
 ```
 Contents
 ```
@@ -368,7 +368,9 @@ Organizational Unit Name (eg, section) []:
 Common Name (e.g. server FQDN or YOUR name) []:Kimmo Polojarvi
 Email Address []:kpolojar@debian.debbie
 
+```
 sudo nano /etc/apache2/conf-available/ssl-params.conf
+```
 
 ```
 SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
