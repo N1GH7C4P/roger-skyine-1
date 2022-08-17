@@ -259,8 +259,11 @@ Notice that the ufw needs to be stopped because otherwise it would block the por
 ```
 sudo cat /var/log/syslog
 ```
-
 ![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image06.png?raw=true)
+
+The first scan reveals the open ports for HTTP, HTTPS and SSH. Howerever the attacker gets banned and on the second try. All of the ports are hidden.
+
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image07.png?raw=true)
 
 # MONITORING & UPDATES
 
