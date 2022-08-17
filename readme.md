@@ -193,7 +193,22 @@ ignoreregex =
 
 https://en-wiki.ikoula.com/en/To_protect_against_the_scan_of_ports_with_portsentry
 
-Pretty much just followed the tutorial here ...
+Added the iMac ip address to the ignore list.
+```
+sudo nano /etc/portsentry/portsentry.ignore.static
+```
+```
+sudo nano /etc/default/portsentry
+```
+Asvanced mode for TCP and UDP -protocols.
+```
+TCP_MODE="atcp"
+UDP_MODE="audp"
+```
+We opt for a blocking of malicious persons through iptables.
+```
+KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"
+```
 
 ## Testing network security
 
@@ -233,10 +248,19 @@ sudo netstat -tulpn | grep LISTEN
 
 ### Port scan with nmap (other computer in same network)
 
+```
 brew install nmap
 nmap -PN -sS 10.13.199.214
+```
 
-![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image02.png?raw=true)
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image05.png?raw=true)
+
+Notice that the ufw needs to be stopped because otherwise it would block the portscans instead.
+```
+sudo cat /var/log/syslog
+```
+
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image05.png?raw=true)
 
 # MONITORING & UPDATES
 
