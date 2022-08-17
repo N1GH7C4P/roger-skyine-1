@@ -30,50 +30,77 @@ Roger-skyline-1 let you install a Virtual Machine, discover the basics about sys
 # INSTALLATION
 
 Installed Debian 11, disk size 8 GB and 4.2 GB home partition on VirtualBox VM.
-
+Started the VM, logged in as root.
+```
 apt-get update
 apt-get upgrade
+```
 
 ## Adding non-root user
 
+```
 adduser kpolojar
 apt-get install sudo
 usermod -aG sudo kpolojar
+```
+You can assume that everything after this point will be done logged in as kpolojar.
 
 ## Network configuration
 
 Changed VM network setting NAT -> Bridged
 
-Setup static ip address:
+### Setting up static ip address
 
-/etc/network/interfaces
+```
+sudo nano /etc/network/interfaces
+```
+
+```
 #Primary network interface
 auto enp0s3
-
+```
+```
 /etc/network/interfaces.d/enp0s3
+```
+```
 iface enp0s3 inet static
 	address 10.13.199.214
 	netmask 255.255.255.252 (/30)
 	gateway 10.13.254.254
+```
 
 ## SSH connection
 
-/etc/ssh/sshd_config
 Changed the ssh default port to 5555
 
-Created key pair with ssh-keygen in VM
+```
+sudo nano /etc/ssh/sshd_config
+```
+
+Created key pair with
+
+```
+sudo ssh-keygen
+```
 
 Changed SSH settings to allow for password connection.
-/etc/ssh/sshd_config
+```
+sudo nano /etc/ssh/sshd_config
+```
 uncomment PasswordAuthentication
 
 Connected from iMac to virtual machine with SSH using password
 ssh 10.13.199.214 -p 5555 (no need for username because same on both systems)
 
-Copied key to VM with ssh-copy-id 
+Copied key to VM
+```
+ssh-copy-id
+```
 
 Changed settings back to refuse password connection
-/etc/ssh/sshd_config
+```
+sudo nano /etc/ssh/sshd_config
+```
 comment out PasswordAuthentication
 uncommment PubkeyAuthentication
 
