@@ -88,7 +88,6 @@ Added rules to allow tcp at ports 5555 and 80 for SSH and HTTP respectively, 443
 ```
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw allow ssh
 sudo ufw allow 5555/tcp
 sudo ufw allow 80/tcp
 sudo ufw allow 443
@@ -158,6 +157,12 @@ failregex = ^<HOST> -.*"(GET|POST|PUT|DELETE).*
 ignoreregex =
 ```
 
+## Portsentry
+
+https://en-wiki.ikoula.com/en/To_protect_against_the_scan_of_ports_with_portsentry
+
+Pretty much just followed the tutorial here ...
+
 ## Testing network security
 
 ### slowloris
@@ -179,11 +184,13 @@ Bans are listed in file:
 /etc/fail2ban/jail.local
 Clearing the file will end all current bans without affecting the filters.
 
-## Portsentry
+## List open ports
 
-https://en-wiki.ikoula.com/en/To_protect_against_the_scan_of_ports_with_portsentry
+https://www.cyberciti.biz/faq/how-to-check-open-ports-in-linux-using-the-cli/
 
-Pretty much just followed the tutorial here ...
+sudo netstat -tulpn | grep LISTEN
+
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image02.png?raw=true)
 
 # MONITORING & UPDATES
 
@@ -297,7 +304,7 @@ sudo systemctl disable apt-daily.timer
 
 This is what we are left with.
 
-![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image.png?raw=true)
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image01.png?raw=true)
 
 # SSL
 
