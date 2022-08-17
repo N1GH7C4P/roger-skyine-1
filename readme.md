@@ -224,12 +224,17 @@ Bans are listed in file:
 ```
 Clearing the file will end all current bans without affecting the filters.
 
-## List open ports
+### List open ports
 
 https://www.cyberciti.biz/faq/how-to-check-open-ports-in-linux-using-the-cli/
 ```
 sudo netstat -tulpn | grep LISTEN
 ```
+
+### Port scan with nmap (other computer in same network)
+
+brew install nmap
+nmap -PN -sS 10.13.199.214
 
 ![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image02.png?raw=true)
 
@@ -304,11 +309,11 @@ Created a cronjob to run the scripts at correct times.
 sudo crontab -e
 
 ```
-Update packages every sunday at 4 AM and at reboot.
+# Update packages every sunday at 4 AM and at reboot.
 0 4  * *  0 sudo sh /scripts/update.sh
 @reboot sudo sh /scripts/update.sh
 
-Monitor crontab and send mail in case of change at midnight
+# Monitor crontab and send mail in case of change at midnight
 0 0 * * *  sudo sh /scripts/cron_monitor.sh
 ```
 
@@ -321,6 +326,8 @@ List enabled services
 ```
 systemctl list-unit-files --state=enabled
 ```
+
+Disable unnescessary services
 
 ```
 kpolojar@debian:~$ sudo systemctl disable console-setup.service
@@ -342,12 +349,6 @@ Removed /etc/systemd/system/timers.target.wants/apt-daily.timer.
 kpolojar@debian:~$
 ```
 
-Disable unnescessary services
-
-```
-sudo systemctl disable apt-daily.timer
-```
-
 This is what we are left with.
 
 ![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image01.png?raw=true)
@@ -358,8 +359,11 @@ https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl
 
 Creating certificate
 
+```
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+```
 
+```
 Country Name (2 letter code) [AU]:FI
 State or Province Name (full name) [Some-State]:Uusimaa
 Locality Name (eg, city) []:Helsinki
@@ -367,6 +371,7 @@ Organization Name (eg, company) [Internet Widgits Pty Ltd]:Hive
 Organizational Unit Name (eg, section) []:
 Common Name (e.g. server FQDN or YOUR name) []:Kimmo Polojarvi
 Email Address []:kpolojar@debian.debbie
+```
 
 ```
 sudo nano /etc/apache2/conf-available/ssl-params.conf
@@ -415,6 +420,7 @@ sudo nano /etc/apache2/sites-available/default-ssl.conf
                 </Directory>
         </VirtualHost>
 </IfModule>
+
 ```
 sudo nano /etc/apache2/sites-available/000-default.conf
 ```
