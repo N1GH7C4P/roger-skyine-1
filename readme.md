@@ -85,6 +85,16 @@ Installed ufw
 
 Added rules to allow tcp at ports 5555 and 80 for SSH and HTTP respectively, 443 for https (udp & tcp)
 
+```
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw allow 5555/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443
+sudo ufw enable
+```
+
 ## Fail2ban
 
 https://www.garron.me/en/go2linux/fail2ban-protect-web-server-http-dos-attack.html
@@ -226,20 +236,7 @@ Created a  script that compares /etc/crontab and /etc/crontab.backup, if there i
 ```
 sudo nano script cron_monitor.sh
 ```
-
-Created a cronjob to run the scripts at correct times. 
-(Note that this is different file from /etc/crontab so it wont trigger the script itself)
-sudo crontab -e
-
-```
-Update packages every sunday at 4 AM and at reboot.
-0 4  * *  0 /scripts/update.sh
-@reboot sudo /scripts/update.sh
-
-Monitor crontab and send mail in case of change at midnight
-0 0 * * *  sudo /scripts/cron_monitor.sh
-```
-
+Contents
 ```
 #!/bin/bash
 DIFF=$(diff /etc/crontab.backup /etc/crontab)
@@ -247,6 +244,19 @@ cat /etc/crontab > /etc/crontab.backup
 if [ "$DIFF" != "" ]; then
         echo "crontab changed, sending mail to root" | mail -s "crontab updated" root
 fi
+```
+
+Created a cronjob to run the scripts at correct times. 
+(Note that this is different file from /etc/crontab so it wont trigger the script itself)
+sudo crontab -e
+
+```
+Update packages every sunday at 4 AM and at reboot.
+0 4  * *  0 sudo sh /scripts/update.sh
+@reboot sudo sh /scripts/update.sh
+
+Monitor crontab and send mail in case of change at midnight
+0 0 * * *  sudo sh /scripts/cron_monitor.sh
 ```
 
 # RESOURCE EFFICIENCY
