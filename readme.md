@@ -60,7 +60,7 @@ sudo nano /etc/network/interfaces
 auto enp0s3
 ```
 ```
-/etc/network/interfaces.d/enp0s3
+sudo nano /etc/network/interfaces.d/enp0s3
 ```
 ```
 iface enp0s3 inet static
@@ -89,9 +89,10 @@ sudo nano /etc/ssh/sshd_config
 ```
 uncomment PasswordAuthentication
 
-Connected from iMac to virtual machine with SSH using password
-ssh 10.13.199.214 -p 5555 (no need for username because same on both systems)
-
+Connected from iMac to virtual machine with SSH using password (no need for username because same on both systems)
+```
+ssh 10.13.199.214 -p 5555
+```
 Copied key to VM
 ```
 ssh-copy-id
@@ -406,7 +407,15 @@ sudo nano /etc/apache2/sites-available/000-default.conf
 </VirtualHost>
 ```
 
-Navigating to 10.13.199.214 with browser warns about unknown certificate and opens up the apache greeting site.
+Navigating to 10.13.199.214 with browser warns about unknown certificate.
+
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image03.png?raw=true)
+
+Clicking the "view certificate" shows you the newly created SSL -certificate.
+
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image04.png?raw=true)
+
+"Accept the risk and continue" Takes you to the website hosted on the server, by default the Apache landing page.
 
 # DEPLOYMENT AUTOMATION
 
