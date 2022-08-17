@@ -297,7 +297,7 @@ sudo systemctl disable apt-daily.timer
 
 This is what we are left with.
 
-![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/master/image.png?raw=true)
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image.png?raw=true)
 
 # SSL
 
