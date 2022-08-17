@@ -435,7 +435,9 @@ Now when you do
 ```
 git push server master
 ```
-the changes are pushed straight to the VM server.
+The changes are pushed straight to the VM server amd you can see the change happen in browser.
+
+https://10.13.199.214/
 
 # CHECKSUM
 
