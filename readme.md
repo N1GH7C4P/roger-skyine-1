@@ -128,8 +128,9 @@ https://www.garron.me/en/go2linux/fail2ban-protect-web-server-http-dos-attack.ht
 
 https://www.xmodulo.com/configure-fail2ban-apache-http-server.html
 
-
-Edit your /etc/fail2ban/jail.conf file and add this section:
+```
+sudo nano /etc/fail2ban/jail.conf
+```
 
 ```
 [http-get-dos]
@@ -176,7 +177,10 @@ logpath  = /var/log/apache*/*error.log
 maxretry = 2
 ```
 
-Now we need to create the filter, to do that, create the file /etc/fail2ban/filter.d/http-get-dos.conf and copy the text below in it:
+Create the filter
+```
+sudo nano  /etc/fail2ban/filter.d/http-get-dos.conf
+```
 
 ```
 [Definition]
@@ -195,28 +199,37 @@ Pretty much just followed the tutorial here ...
 
 ### slowloris
 
-Tested fail2ban with slowloris
+Tested fail2ban with slowloris (Launched from other VM)
+```
 slowloris 10.13.199.214
+```
 monitoring the log file shows thefailed DOS -attempts. 
+```
 sudo tail -f /var/log/fail2ban.log
+```
 
 ### Trying to SSH directly to root (forbidden)
 
+```
 ssh root@10.13.199.214
+```
 
 ### Unbanning myself
 
 So I had to go and manually unban myself. 
 
 Bans are listed in file:
+```
 /etc/fail2ban/jail.local
+```
 Clearing the file will end all current bans without affecting the filters.
 
 ## List open ports
 
 https://www.cyberciti.biz/faq/how-to-check-open-ports-in-linux-using-the-cli/
-
+```
 sudo netstat -tulpn | grep LISTEN
+```
 
 ![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image02.png?raw=true)
 
@@ -224,7 +237,12 @@ sudo netstat -tulpn | grep LISTEN
 
 ## Mail
 
-Installed mailutils and postfix
+All in all configuring the mail service was the biggest hurdle in the whole project. This is mostle due to unclear instructions from the subject combined with the design choice of not allowing root to receive email in Debian. I'm  not happy with my solution to the problem, but I fail to see any better alternative.
+
+```
+sudo apt-get install mailutils
+sudo apt-get install postfix
+```
 
 Delivering mail to the root has been disabled on any Debian distribution.
 ```
