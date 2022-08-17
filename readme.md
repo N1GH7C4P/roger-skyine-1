@@ -202,8 +202,12 @@ https://serverfault.com/questions/890429/debian-exim4-eading-local-mail-with-the
 
 ## Scripts
 
-created script update.sh
-Updates & upgrades all packages.
+Created a script that updates all packages.
+```
+sudo nano /scripts/update.sh
+```
+
+With following contents
 
 ```
 !/bin/bash
@@ -211,18 +215,30 @@ sudo apt-get update -y >> /var/log/update_script.log
 sudo apt-get upgrade -y >> /var/log/update_script.log
 ```
 
-created /etc/crontab.backup and gave it chmod 755
-created script cron_monitor.sh
-compares /etc/crontab and /etc/crontab.backup, if there is diff, creates new backup and notifies admins.
+Created the backup file
 
-modified /etc/crontab
+```
+sudo nano /etc/crontab.backup
+sudo chmod 755 /etc/crontab.backup
+```
 
+Created a  script that compares /etc/crontab and /etc/crontab.backup, if there is diff, creates new backup and send mail to root (see [Mail](#mail)).
+```
+sudo nano script cron_monitor.sh
+```
+
+Created a cronjob to run the scripts at correct times. 
+(Note that this is different file from /etc/crontab so it wont trigger the script itself)
+sudo crontab -e
+
+```
 Update packages every sunday at 4 AM and at reboot.
 0 4  * *  0 /scripts/update.sh
 @reboot sudo /scripts/update.sh
 
 Monitor crontab and send mail in case of change at midnight
-0 0 * * *  sudo ~/home/kpolojar/cron_monitor.sh
+0 0 * * *  sudo /scripts/cron_monitor.sh
+```
 
 ```
 #!/bin/bash
