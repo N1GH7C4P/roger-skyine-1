@@ -538,4 +538,4 @@ https://10.13.199.214/
 # CHECKSUM
 
 shasum ~/goinfre/debbie.vdi
-e3d63b5b2b17357568e9b2f15c7f70803caf9aad  /Users/kpolojar/goinfre/debbie.vdi
+d480b8ec3299920e6bc93bebf8de5faab1f9adfc
