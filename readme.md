@@ -36,10 +36,10 @@ Started the VM, logged in as root.
 If we add these together we get 8033 MB ~ 8 GB. However the designated 4.2 GB partiton seems to be too small at 3.8 GB.
 
 I installed parted, a tool to analyze and resize partition tables.
-![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image9.png?raw=true)
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image09.png?raw=true)
 Here we see that the size of the partition is indeed 4.2 GB, However the size of the entire disk is now listed as 8.590 MB which is slightly more than previously listed. When looked outside of VM the disk size is listed at 8.59 GB. This weird because I spcefied 8.0 GB for the disk size at the installation of the VM.
 
-![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image9.png?raw=true)
+![Image](https://github.com/N1GH7C4P/roger-skyine-1/blob/documented/image10.png?raw=true)
 Then if we go to the Virtual box  and check the settings for the disk, it is listed as 8,00 GB so apparently the 590 MB is needed for configuration  of the dislk file.
 
 ```
